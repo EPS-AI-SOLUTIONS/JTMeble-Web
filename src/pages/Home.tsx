@@ -39,7 +39,7 @@ export default function Home() {
                 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80';
             }}
           />
-          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 backdrop-blur-[2px]" />
         </div>
         <div className="relative z-10 text-center px-4 max-w-5xl mx-auto mt-16">
           <motion.h1
@@ -98,7 +98,7 @@ export default function Home() {
               <motion.div
                 key={idx}
                 whileHover={{ y: -10 }}
-                className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer h-96"
+                className="group relative rounded-[2rem] overflow-hidden shadow-2xl shadow-blue-900/10 cursor-pointer h-96"
               >
                 <img
                   src={item.img}
@@ -130,7 +130,7 @@ export default function Home() {
             {testimonials.map((t, idx) => (
               <div
                 key={idx}
-                className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700"
+                className="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-xl shadow-blue-900/5 border border-gray-100 dark:border-gray-700"
               >
                 <div className="flex text-blue-500 mb-4">
                   {[1, 2, 3, 4, 5].map((i) => (
