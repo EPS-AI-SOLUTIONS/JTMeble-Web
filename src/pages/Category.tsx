@@ -88,7 +88,7 @@ export default function Category() {
                           className="max-h-full object-contain mix-blend-multiply dark:mix-blend-normal"
                           onError={(e) =>
                             (e.currentTarget.src =
-                              'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80')
+                              '/images/hero-bg-1.jpg')
                           }
                         />
                       </div>

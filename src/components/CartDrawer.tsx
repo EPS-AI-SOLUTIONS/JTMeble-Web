@@ -83,7 +83,7 @@ export default function CartDrawer() {
                         className="w-16 h-16 object-contain mix-blend-multiply dark:mix-blend-normal bg-white dark:bg-gray-700 rounded-lg p-1"
                         onError={(e) =>
                           (e.currentTarget.src =
-                            'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80')
+                            '/images/hero-bg-1.jpg')
                         }
                       />
                       <div className="flex-1">

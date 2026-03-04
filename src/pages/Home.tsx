@@ -36,7 +36,7 @@ export default function Home() {
             className="w-full h-full object-cover"
             onError={(e) => {
               e.currentTarget.src =
-                'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80';
+                '/images/hero-bg-1.jpg';
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 backdrop-blur-[2px]" />
@@ -80,19 +80,19 @@ export default function Home() {
                 title: 'Kuchnie na wymiar',
                 img: '/images/hero-bg-2.jpg',
                 fallback:
-                  'https://images.unsplash.com/photo-1556910103-1c02745a872f?auto=format&fit=crop&q=80',
+                  '/images/hero-bg-2.jpg',
               },
               {
                 title: 'Szafy i Garderoby',
                 img: '/images/hero-bg-3.jpg',
                 fallback:
-                  'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&q=80',
+                  '/images/hero-bg-3.jpg',
               },
               {
                 title: 'Meble Biurowe',
                 img: '/images/product-1.jpg',
                 fallback:
-                  'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80',
+                  '/images/product-1.jpg',
               },
             ].map((item, idx) => (
               <motion.div

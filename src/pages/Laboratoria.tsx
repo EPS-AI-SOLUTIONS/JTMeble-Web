@@ -67,7 +67,7 @@ export default function Laboratoria() {
                 className="w-full h-80 object-cover rounded-2xl shadow-md mix-blend-multiply dark:mix-blend-normal bg-white"
                 onError={(e) => {
                   e.currentTarget.src =
-                    'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80';
+                    '/images/hero-bg-6.jpg';
                 }}
               />
             </div>

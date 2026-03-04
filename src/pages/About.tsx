@@ -45,7 +45,7 @@ export default function About() {
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.currentTarget.src =
-                    'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80';
+                    '/images/hero-bg-7.jpg';
                 }}
               />
             </div>

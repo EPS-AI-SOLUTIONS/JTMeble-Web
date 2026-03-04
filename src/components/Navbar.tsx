@@ -103,7 +103,7 @@ export default function Navbar() {
                         className="w-10 h-10 object-contain rounded bg-gray-50 dark:bg-gray-600 mix-blend-multiply dark:mix-blend-normal"
                         onError={(e) =>
                           (e.currentTarget.src =
-                            'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80')
+                            '/images/hero-bg-1.jpg')
                         }
                       />
                       <span className="text-sm font-medium text-gray-900 dark:text-white line-clamp-1">
