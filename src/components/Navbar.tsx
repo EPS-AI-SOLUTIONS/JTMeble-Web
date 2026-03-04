@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Armchair, FileText, ShoppingCart, Moon, Sun } from 'lucide-react';
+import { Menu, X, Armchair, ShoppingCart, Moon, Sun } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
 
 export default function Navbar() {
@@ -140,3 +140,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

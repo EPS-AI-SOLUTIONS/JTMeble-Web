@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { ChevronLeft, ShoppingCart, Check } from 'lucide-react';
 import { useState } from 'react';
 import catalog from '../data/catalog.json';
-import { useCartStore, Product } from '../store/useCartStore';
+import { useCartStore, type Product } from '../store/useCartStore';
 
 export default function Category() {
   const { slug } = useParams();
@@ -122,3 +122,4 @@ export default function Category() {
     </div>
   );
 }
+
