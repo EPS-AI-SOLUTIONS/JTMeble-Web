@@ -63,7 +63,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="/files/Katalog_JT_Mebel_2022.pdf"
+                  href="/files/Nowy_Katalog_JTMeble.pdf"
                   target="_blank"
                   className="text-gray-600 dark:text-gray-400 hover:text-orange-500 transition-colors font-medium"
                 >
@@ -81,3 +81,4 @@ export default function Footer() {
     </footer>
   );
 }
+
