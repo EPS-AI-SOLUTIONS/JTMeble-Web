@@ -1,6 +1,6 @@
 ﻿import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useState } from 'react';
-import { Menu, X, Phone, Mail, MapPin, Armchair, FileText } from 'lucide-react';
+import { Menu, X, Phone, Mail, MapPin, Armchair } from 'lucide-react';
 import Home from './pages/Home';
 import About from './pages/About';
 import Offer from './pages/Offer';
@@ -25,7 +25,7 @@ export default function App() {
                   </span>
                 </Link>
               </div>
-              <div className="hidden md:flex space-x-8">
+              <div className="hidden md:flex items-center space-x-8">
                 <Link
                   to="/"
                   className="text-gray-600 hover:text-orange-500 px-3 py-2 text-sm font-medium transition-colors"
