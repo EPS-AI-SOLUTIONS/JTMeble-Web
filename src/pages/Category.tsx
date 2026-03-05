@@ -13,7 +13,7 @@ export default function Category() {
   const products = catalog.products.filter((p) => p.categoryId === slug) as unknown as Product[];
   const addItem = useCartStore((state) => state.addItem);
   const cartItems = useCartStore((state) => state.items);
-  const [addedItems, setAddedItems] = useState<Record<number, boolean>>({});
+  const [addedItems, setAddedItems] = useState<Record<string | number, boolean>>({});
 
   const handleAdd = (product: Product) => {
     if (!cartItems.find((i) => i.id === product.id)) {
