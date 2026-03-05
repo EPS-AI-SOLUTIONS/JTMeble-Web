@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
 import { Search, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react';
 import PageWrapper from '../components/PageWrapper';
+import ProductModal from '../components/ProductModal';
 import scrapedData from '../data/scraped_products.json';
 import { useCartStore } from '../store/useCartStore';
 
@@ -12,6 +13,7 @@ export default function Catalog() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<{ product: any, idx: number } | null>(null);
   const addItem = useCartStore((state) => state.addItem);
 
   const categories = useMemo(() => {
@@ -86,7 +88,8 @@ export default function Catalog() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2, delay: idx * 0.05 }}
-                className="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 group hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 group hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => setSelectedProduct({ product, idx })}
               >
                 <div className="aspect-square relative p-4 bg-white flex items-center justify-center">
                   <img
@@ -181,6 +184,17 @@ export default function Catalog() {
               </button>
             </div>
           )}
+
+          {/* Modal Produktu */}
+          <AnimatePresence>
+            {selectedProduct && (
+              <ProductModal
+                product={selectedProduct.product}
+                idx={selectedProduct.idx}
+                onClose={() => setSelectedProduct(null)}
+              />
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </PageWrapper>

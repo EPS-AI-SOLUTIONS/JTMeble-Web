@@ -1,11 +1,15 @@
-import { motion } from 'motion/react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
 import PageWrapper from '../components/PageWrapper';
+import ProductModal from '../components/ProductModal';
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import scrapedData from '../data/scraped_products.json';
 
 export default function Home() {
+  const [selectedProduct, setSelectedProduct] = useState<{ product: any, idx: number } | null>(null);
+
   return (
     <PageWrapper>
       <Helmet>
@@ -139,6 +143,7 @@ export default function Home() {
                 key={`${product.name}-${idx}`}
                 whileHover={{ y: -5 }}
                 className="snap-start flex-none w-[280px] bg-white dark:bg-slate-900 rounded-2xl shadow-md hover:shadow-xl hover:shadow-blue-900/5 border border-blue-50 dark:border-slate-700 overflow-hidden group cursor-pointer transition-all"
+                onClick={() => setSelectedProduct({ product, idx })}
               >
                 <div className="aspect-square relative p-6 bg-white flex items-center justify-center">
                   <img
@@ -192,6 +197,17 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Modal Produktu */}
+      <AnimatePresence>
+        {selectedProduct && (
+          <ProductModal
+            product={selectedProduct.product}
+            idx={selectedProduct.idx}
+            onClose={() => setSelectedProduct(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
 </PageWrapper>
   );
