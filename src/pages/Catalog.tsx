@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react';
 import PageWrapper from '../components/PageWrapper';
 import scrapedData from '../data/scraped_products.json';
+import { useCartStore } from '../store/useCartStore';
 
 const ITEMS_PER_PAGE = 24;
 
@@ -11,6 +12,7 @@ export default function Catalog() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const addItem = useCartStore((state) => state.addItem);
 
   const categories = useMemo(() => {
     const cats = new Set<string>();
@@ -102,9 +104,30 @@ export default function Catalog() {
                   <h3 className="font-bold text-gray-900 dark:text-white line-clamp-2 mb-2" title={product.name}>
                     {product.name}
                   </h3>
-                  {product.price && (
-                    <p className="font-medium text-gray-900 dark:text-gray-100">{product.price}</p>
-                  )}
+                  <div className="flex justify-between items-center mt-2">
+                    {product.price ? (
+                      <p className="font-medium text-gray-900 dark:text-gray-100">{product.price}</p>
+                    ) : (
+                      <p className="font-medium text-gray-500 dark:text-gray-400">Zapytaj o cenę</p>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addItem({
+                          id: `${product.name}-${idx}`,
+                          name: product.name,
+                          price: product.price ? parseFloat(product.price.replace(/[^\d,.-]/g, '').replace(',', '.')) : 0,
+                          image: product.image || '/images/hero-bg-1.jpg',
+                          category: product.category,
+                          quantity: 1
+                        });
+                      }}
+                      className="p-2 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white rounded-lg transition-colors"
+                      title="Dodaj do zapytania"
+                    >
+                      <ShoppingCart size={18} />
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             ))}

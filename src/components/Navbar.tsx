@@ -1,8 +1,9 @@
-﻿import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, ShoppingCart, Moon, Sun, Search, Globe } from 'lucide-react';
+import { Menu, X, ShoppingCart, Moon, Sun, Search, Globe, ChevronDown } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
 import catalog from '../data/catalog.json';
+import scrapedData from '../data/scraped_products.json';
 import { useTranslation } from 'react-i18next';
 
 export default function Navbar() {
@@ -35,6 +36,16 @@ export default function Navbar() {
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === 'pl' ? 'en' : 'pl');
   };
+
+  const categories = useMemo(() => {
+    const cats = new Set<string>();
+    if (scrapedData && scrapedData.products) {
+      scrapedData.products.forEach((p: any) => {
+        if (p.category) cats.add(p.category);
+      });
+    }
+    return Array.from(cats).sort();
+  }, []);
 
   const searchResults =
     searchQuery.trim() === ''
@@ -117,12 +128,38 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Link
-              to="/katalog"
-              className={`text-sm font-medium transition-colors px-2 py-2 ${isActive('/katalog') ? 'text-blue-600' : 'text-gray-600 dark:text-gray-300 hover:text-blue-600'}`}
-            >
-              Katalog
-            </Link>
+            <div className="relative group">
+              <Link
+                to="/katalog"
+                className={`flex items-center text-sm font-medium transition-colors px-2 py-6 ${isActive('/katalog') ? 'text-blue-600' : 'text-gray-600 dark:text-gray-300 hover:text-blue-600'}`}
+              >
+                Katalog <ChevronDown size={14} className="ml-1 group-hover:rotate-180 transition-transform duration-200" />
+              </Link>
+              
+              {/* MegaMenu Dropdown */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 w-[800px] bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-2xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 p-6">
+                <div className="grid grid-cols-3 gap-6">
+                  {categories.map((cat, idx) => (
+                    <Link
+                      key={idx}
+                      to="/katalog"
+                      state={{ category: cat }}
+                      className="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group/item"
+                    >
+                      <span className="text-sm font-medium text-gray-900 dark:text-white group-hover/item:text-blue-600 transition-colors line-clamp-1">
+                        {cat}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+                <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 text-center">
+                  <Link to="/katalog" className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors">
+                    Zobacz wszystkie produkty &rarr;
+                  </Link>
+                </div>
+              </div>
+            </div>
+
             <Link
               to="/oferta"
               className={`text-sm font-medium transition-colors px-2 py-2 ${isActive('/oferta') ? 'text-blue-600' : 'text-gray-600 dark:text-gray-300 hover:text-blue-600'}`}
