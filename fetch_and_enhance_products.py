@@ -8,6 +8,7 @@ from urllib.error import HTTPError, URLError
 JSON_PATH = r"C:\Users\BIURODOM\Desktop\JTMeble-Web\src\data\scraped_products.json"
 OUTPUT_DIR = r"C:\Users\BIURODOM\Desktop\JTMeble-Web\public\images\products"
 API_URL = "http://localhost:8080/api/restore"
+BROWSER_PROXY_URL = os.environ.get("BROWSER_PROXY_URL", "http://localhost:3001")
 
 def ensure_dir(path):
     if not os.path.exists(path):
@@ -33,24 +34,24 @@ def download_image(url, save_path):
 def enhance_with_tissaia(file_path):
     filename = os.path.basename(file_path)
     print(f"[{filename}] Upscaling Tissaia (ONNX + Real-ESRGAN)...")
-    
+
     try:
         with open(file_path, "rb") as f:
             raw_data = f.read()
     except Exception as e:
         print(f"Nie można odczytać pliku {file_path}: {e}")
         return False
-        
+
     b64_img = base64.b64encode(raw_data).decode('utf-8')
     mime_type = "image/png" if filename.lower().endswith(".png") else "image/jpeg"
-    
+
     payload = {
         "image_base64": b64_img,
         "mime_type": mime_type,
         "file_name": filename,
-        "mode": "object" # Używamy tego samego udanego trybu
+        "mode": "object"
     }
-    
+
     max_retries = 3
     for attempt in range(max_retries):
         req = urllib.request.Request(API_URL, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json"})
@@ -77,7 +78,67 @@ def enhance_with_tissaia(file_path):
         except Exception as e:
             print(f"Błąd Tissaia dla {filename} (Attempt {attempt+1}/{max_retries}): {e}")
             time.sleep(30)
-            
+
+    return False
+
+def enhance_with_browser_proxy(file_path, prompt=None):
+    """Ulepsz obraz przez gemini-browser-proxy (Gemini AI via Playwright)."""
+    filename = os.path.basename(file_path)
+    if prompt is None:
+        prompt = (
+            "Enhance this product photo for an e-commerce furniture store. "
+            "Improve lighting, contrast, and sharpness. Make the product stand out "
+            "with professional quality. Keep the original composition and colors accurate."
+        )
+
+    print(f"[{filename}] AI Enhancement via browser proxy...")
+
+    try:
+        with open(file_path, "rb") as f:
+            raw_data = f.read()
+    except Exception as e:
+        print(f"Nie można odczytać pliku {file_path}: {e}")
+        return False
+
+    b64_img = base64.b64encode(raw_data).decode('utf-8')
+    mime_type = "image/png" if filename.lower().endswith(".png") else "image/jpeg"
+
+    payload = {
+        "image_base64": b64_img,
+        "mime_type": mime_type,
+        "prompt": prompt,
+    }
+
+    url = f"{BROWSER_PROXY_URL}/api/generate-image"
+    max_retries = 2
+    for attempt in range(max_retries):
+        req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json"})
+        try:
+            t0 = time.time()
+            with urllib.request.urlopen(req, timeout=360) as resp:
+                data = json.loads(resp.read().decode('utf-8'))
+                if "image_base64" in data:
+                    out_data = base64.b64decode(data["image_base64"])
+                    with open(file_path, "wb") as f_out:
+                        f_out.write(out_data)
+                    elapsed = time.time() - t0
+                    print(f"[{elapsed:.1f}s] AI Enhanced! -> {filename}")
+                    return True
+                else:
+                    print(f"Brak image_base64 w odpowiedzi proxy.")
+                    return False
+        except urllib.error.HTTPError as e:
+            body = e.read().decode('utf-8', errors='ignore')
+            print(f"HTTP Error {e.code}: {body}")
+            if e.code in (502, 503) and attempt < max_retries - 1:
+                print("Worker busy, retrying in 5s...")
+                time.sleep(5)
+            else:
+                time.sleep(10)
+        except Exception as e:
+            print(f"Błąd proxy dla {filename} (Attempt {attempt+1}/{max_retries}): {e}")
+            time.sleep(10)
+
     return False
 
 def process_products():
